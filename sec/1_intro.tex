@@ -1,3 +1,27 @@
 \section{Introduction}
 \label{sec:intro}
 
+
+
+% --- Additive paper framework; experimental results pending. ---
+
+Generalist robot policies increasingly aim to execute downstream tasks without task-specific fine-tuning. Evaluating this capability requires tests that span activities, environments, and compatible robot embodiments. A fixed collection of narrowly distributed tasks may leave important failure modes unobserved; increasing the number of rollouts alone does not establish broader coverage.
+
+Egocentric videos provide a source of tasks grounded in human activity. In addition to scene context and task intent, suitable unedited videos provide a reference execution trace and duration. However, converting these observations into useful evaluations requires more than visual reconstruction: environments must support physical interaction, reproducible resets, and reliable success checks. Physical parameters that cannot be identified from video must be documented and assessed for sensitivity.
+
+GenBench-$\infty$ is organized around the following question: can scalable evaluation grounded in human activities characterize zero-shot policy generalization across tasks and embodiments, and predict performance in corresponding real-world settings? Our framework connects video-derived task construction, agentic simulation refinement, and asynchronous policy evaluation. We separate a common comparison subset from a full evaluation suite and a paired simulation--real-world subset.
+
+The initial release is scoped to 1,000 scenes and 3,000 task instances. The final manifest must distinguish validated tasks, released tasks, and evaluated episodes. The infinity symbol denotes continued expansion rather than an infinite evaluated dataset. Future releases will be versioned separately from the frozen benchmark used in this paper.
+
+\paragraph{Contributions.}
+The benchmark has three components:
+\begin{itemize}
+\item A human-activity-grounded benchmark and explicit protocols for evaluating policies without benchmark-specific adaptation across compatible embodiments.
+\item A video-to-simulation construction pipeline using agentic greedy refinement and validation, together with asynchronous execution for scalable evaluation.
+\item An evaluation protocol for task coverage, policy--embodiment performance, simulation--real-world agreement, and human-referenced efficiency.
+\end{itemize}
+\TODO{Replace the third contribution with concrete, supported findings once results are available. No quantitative superiority or correlation claim is established by this framework.}
+
+\paragraph{Related work.}
+Robot benchmarking and real-to-simulation construction address related but distinct problems. RoboLab provides a robot- and policy-agnostic simulation benchmarking framework~\cite{gbRoboLab}, while SIMPLER examines agreement between simulated and real-world policy evaluations~\cite{gbSimpler}. RoboSimStudio addresses interactive real-to-simulation construction~\cite{gbRoboSimStudio}; Video2World evaluates the construction of interactive worlds from embodied videos~\cite{gbVideo2World}. GenBench focuses on using human-activity-derived environments as downstream tests of robot policies. This distinction does not by itself establish greater diversity, reconstruction fidelity, or predictive validity; those properties require empirical evaluation.
+\TODO{Extend the comparison to LIBERO, BEHAVIOR-1K, RoboCasa365, and RoboDojo after verifying their protocols and complete publication metadata. Compare task families, instances, scene diversity, adaptation conditions, and real-world validation separately.}
