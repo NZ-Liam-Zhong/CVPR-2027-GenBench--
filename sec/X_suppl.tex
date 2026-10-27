@@ -15,3 +15,23 @@ Having the supplementary compiled together with the main paper means that:
 \end{itemize}
 % 
 To split the supplementary pages from the main paper, you can use \href{https://support.apple.com/en-ca/guide/preview/prvw11793/mac#:~:text=Delete%20a%20page%20from%20a,or%20choose%20Edit%20%3E%20Delete).}{Preview (on macOS)}, \href{https://www.adobe.com/acrobat/how-to/delete-pages-from-pdf.html#:~:text=Choose%20%E2%80%9CTools%E2%80%9D%20%3E%20%E2%80%9COrganize,or%20pages%20from%20the%20file.}{Adobe Acrobat} (on all OSs), as well as \href{https://superuser.com/questions/517986/is-it-possible-to-delete-some-pages-of-a-pdf-document}{command line tools}.
+
+% --- Additive paper framework; experimental results pending. ---
+
+\section{Benchmark Manifest and Provenance}
+Provide source IDs, scene IDs, task-family labels, task-instance IDs, split assignments, observed/derived flags, source permissions, human timing boundaries, and duplicate groups. Report attempted, rejected, repaired, and released tasks.
+
+\section{Generation and Validation Details}
+Provide agent prompts and tool interfaces, search pseudocode, candidate-scoring rules, budgets, physics settings, audit instructions, success-predicate checks, and failed reconstruction examples. Document calibration data separately from validation data.
+
+\section{Policy and Embodiment Configurations}
+Provide exact model/API versions, checkpoints, prompts, adaptation declarations, sensors, action interfaces, controllers, robot placement, limits, and compatibility matrices. Include the full evaluation and timeout protocol.
+
+\section{Extended Results and Statistical Procedures}
+Provide per-task outcomes, repeated-trial counts, domain and embodiment breakdowns, cluster-bootstrap procedures, sampling-study settings, and paired real-world records. Include unsuccessful cases and exclusions rather than only illustrative successes.
+
+\section{Timing and Cost Accounting}
+Provide execution timelines, inference/action overlap, retry and reset accounting, hardware utilization and lifetime assumptions, dated prices, and sensitivity analyses. Separate observed deployment quantities from scenario assumptions.
+
+\section{Reproducibility and Versioned Release}
+Provide simulator and dependency versions, immutable manifests, seeds, validator versions, commands, hardware requirements, logs, and known nondeterminism. Keep the submission's benchmark version fixed when the public library expands.

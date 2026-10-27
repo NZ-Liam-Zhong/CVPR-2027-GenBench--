@@ -1,26 +1,55 @@
 \section{Method}
 \label{sec:Method}
 
-This section will outline our rationale and method for generating scenes and tasks from egocentric videos. 
+\subsection{Problem Definition and Benchmark Units}
+\label{sec:gb_problem}
+Let $v$ denote a source video and let $s$ denote a reconstructed scene. A task instance $\tau$ specifies an initial-state distribution, a language goal, a success predicate, and a termination condition. An embodiment configuration $e$ specifies the robot, end effector, sensors, placement, and controller. An episode evaluates a policy system $\pi$ on $(\tau,e)$ with a recorded initialization seed.
 
-%-------------------------------------------------------------------------
-\subsection{Egocentric Video Rationale}
+For a declared task distribution $\mathcal{D}$, the target quantity is
+\begin{equation}
+S(\pi,e;\mathcal{D})=\mathbb{E}_{\tau\sim\mathcal{D}}\!\left[P(\mathrm{success}\mid\pi,e,\tau)\right].
+\end{equation}
+This quantity is distribution-dependent; convergence on the benchmark does not imply universal real-world generalization. Multiple tasks from one scene and multiple embodiments tested on one task do not constitute independent source scenes.
 
-This section will explain why we choose to generate our tasks from egocentric videos, and the benefits of this method over other methods of scene generation, as well as the challenges associated with it. 
+\subsection{Egocentric Video Rationale and Task Specification}
+\label{sec:gb_sources}
+Each source record must retain provenance, usage permissions, activity category, temporal boundaries, and links to derived scene and task identifiers. Separate tasks directly observed in a source video from tasks proposed using its reconstructed scene. Only a directly matched task with aligned boundaries can inherit a human reference duration.
 
+\TODO{Insert source datasets or collection protocol, inclusion criteria, domain distribution, deduplication rules, and counts of observed versus derived tasks. Report rejected source clips and rejection reasons.}
 
-%-------------------------------------------------------------------------
-\subsection{Agentic Greedy Simulation Tree Search}
+\paragraph{Task coverage.}
+Organize tasks by activity domain, manipulation skill, interaction type, horizon, and embodiment requirements. Report distinct task families as well as instances. Partition related clips and near-duplicate scenes together to prevent development--test leakage. Record known training overlap; for opaque models, claim absence of benchmark-specific adaptation rather than guaranteed absence from pretraining.
 
-This section will explain our pipeline for generating sim ready scenes from Ego videos. 
+\subsection{Agentic Simulation Construction}
+\label{sec:gb_search}
+We represent a candidate simulation as $x=(G,A,\Theta,T,V)$, where $G$ encodes spatial structure, $A$ assets, $\Theta$ physical parameters, $T$ the task specification, and $V$ validation procedures. Candidate edits can repair geometry, asset selection, articulation, collision models, initial states, or task predicates.
 
-maybe explain some of the different methods we tried, as well as compare to existing methods. 
+\TODO{Specify the implemented proposal mechanism, branch factor, node-selection rule, score, budget, stopping rule, and whether rejected branches are retained or revisited. If only one candidate survives each iteration without branching or backtracking, describe the method as greedy iterative refinement.}
 
-Figure of graph based scene generation method. 
+The validation protocol should separately assess source-task fidelity, physical stability, interaction feasibility, reset reproducibility, and success-predicate correctness. A visually plausible scene is insufficient. Feasibility evidence may use a separate scripted or teleoperated execution; it must not select environments according to the performance of a policy being benchmarked.
 
-%-------------------------------------------------------------------------
-\subsection{Asynchronous parallel evaluation for robotics}
+\paragraph{Independent audit.}
+Use held-out manual review and positive/negative trajectories to audit generated success predicates. Include cases such as wrong-object placement, partial completion, unstable final placement, and collision-induced false success. Freeze validators before final evaluation and report agreement with independent labels.
+\TODO{Describe which checks are automated, audit sampling and sample size, manual intervention, uncertain physics parameters, and the treatment of rejected environments.}
 
- 
+\subsection{Embodiment and Policy Interfaces}
+\label{sec:gb_interfaces}
+Expose observations and actions through documented adapters. Log camera configurations, state inputs, action frames and units, control frequency, action chunk length, controller parameters, and robot limits. Report privileged state access, planning tools, prompts, memory, and retry logic for agentic systems. The unit of comparison is the full deployed execution system, not an unspecified model name.
 
+An explicit compatibility matrix separates unsupported configurations from supported configurations that fail. Compare policies on common supported cells. For embodiment selection, separately report task reachability and the cost of infeasibility; do not silently drop unreachable tasks from a deployment-level score.
+
+\subsection{Asynchronous Parallel Evaluation}
+\label{sec:gb_async}
+\TODO{Replace this protocol scaffold with the actual worker architecture and scheduling algorithm.}
+A worker owns an environment state and episode identifier. Observation requests and returned actions must carry episode and step identifiers so responses cannot be applied to stale states. Document simulator advancement while inference is pending, timeout semantics, batching, rate limits, retries, and reset isolation. Preserve the same observation and action semantics in synchronous and asynchronous comparisons.
+
+Record simulation time, evaluation wall-clock time, and deployment-equivalent elapsed time separately. If simulation pauses during API inference, simulated task duration excludes waiting and must not be presented as real deployment latency. If inference overlaps action execution, compute elapsed time from the execution timeline rather than summing overlapping intervals.
+
+\begin{figure}[t]
+\centering
+\fbox{\parbox{0.91\linewidth}{\centering
+Figure placeholder: source ego video and activity annotation $\rightarrow$ candidate simulation and validation $\rightarrow$ frozen task specification $\rightarrow$ compatible robots and policy systems $\rightarrow$ paired evaluation and efficiency analysis.}}
+\caption{Planned overview of the construction and evaluation pipeline. Replace with a diagram of the implemented system and representative matched examples.}
+\label{fig:gb_pipeline}
+\end{figure}
 

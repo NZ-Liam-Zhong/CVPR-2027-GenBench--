@@ -1,3 +1,39 @@
-\section{Metrics}
+\section{Metrics and Analysis}
+\label{sec:gb_metrics}
 
-This section will discuss the different metrics that we can evaluate our benchmark results on, including success rate, time, cost, and how we can evaluate these across the models or embodiments or tasks, and how we can compare to humans directly from the egocentric video. 
+\subsection{Success, Coverage, and Statistical Uncertainty}
+For a supported configuration with $N$ episodes and binary outcomes $y_i$, the empirical success rate is $\widehat S=N^{-1}\sum_i y_i$. Report denominators, supported-task coverage, macro averages over declared families, and per-domain results. Use paired comparisons on shared tasks. Account for dependence among tasks and embodiments derived from the same source scene, for example using cluster bootstrap intervals at the source-scene level. Define treatment of infrastructure errors before evaluation; record exclusions and reruns.
+
+\subsection{Zero-Shot Conditions}
+Report task-specific fine-tuning, embodiment adaptation, target demonstrations, benchmark-specific prompt tuning, and privileged information separately. A model with no task-specific fine-tuning may still require embodiment-specific adaptation. Claims of unseen training tasks require evidence beyond the absence of adaptation during evaluation.
+
+\subsection{Simulation--Real-World Agreement}
+Use rank correlation to characterize ordering and absolute error to characterize calibration. For $K$ matched conditions,
+\begin{equation}
+\mathrm{MAE}=\frac{1}{K}\sum_{k=1}^{K}|\widehat S_k^{\mathrm{sim}}-\widehat S_k^{\mathrm{real}}|.
+\end{equation}
+Specify whether each condition is a policy, a policy--task pair, or a policy--task--embodiment cell. Correlation alone does not establish accurate absolute success rates or reliable deployment-cost predictions. Report uncertainty and the number of independent units.
+
+\subsection{Time and Successful Throughput}
+Distinguish simulated physical duration, evaluation wall-clock duration, and deployment-equivalent duration. Report successful completion time together with failures and timeout rates to avoid survivor bias. For matched unedited human traces, report human-reference duration with identical task boundaries. Aggregate successful throughput can be expressed as the number of successes divided by total deployment-equivalent time, including failed attempts under the declared retry/reset policy.
+
+\subsection{Cost per Successful Completion}
+Let $C_i$ include inference expense, allocated robot operating cost, human intervention, and reset costs for episode $i$. Under a specified accounting boundary,
+\begin{equation}
+C_{\mathrm{success}}=\frac{\sum_{i=1}^{N}C_i}{\sum_{i=1}^{N}y_i}.
+\end{equation}
+All failed attempts contribute costs. A configuration with no successful episodes has no finite empirical cost per success. State which components are measured and which are assumed, avoid double counting, and keep simulator evaluation costs separate from projected physical deployment costs. Human-video duration alone does not establish fully burdened labor cost.
+
+\subsection{Construction Quality and System Efficiency}
+Report accepted tasks divided by attempted tasks, independent audit pass rate, manual repair rate, generation cost per accepted task, and evaluation episodes per wall-clock hour. Quality and throughput must be reported together: faster generation with more invalid tasks does not establish a more useful benchmark.
+
+\section{Limitations and Responsible Release}
+\label{sec:gb_limitations}
+Egocentric sources may overrepresent particular activities and successful human demonstrations. Video does not uniquely determine friction, mass, compliance, or hidden geometry. Filtering for reconstructability may further change the activity distribution. Generated success checks can be wrong, and simulation validity may not extend beyond tested tasks, embodiments, or contact regimes. Closed model versions and unknown pretraining data limit reproducibility and contamination analysis. Human timing and economic estimates depend on task boundaries and deployment assumptions.
+
+Report dataset and asset permissions, privacy handling, source provenance, and release constraints. Freeze manifests, validators, and configuration versions for each leaderboard release. Continuous expansion should create versioned evaluations rather than silently change the denominator of existing scores.
+
+\section{Conclusion}
+\label{sec:gb_conclusion}
+GenBench-$\infty$ studies scalable evaluation of robot policy generalization using tasks grounded in human activities. The evaluation protocol connects simulation construction, multi-embodiment evaluation, and paired real-world assessment, with human-referenced efficiency as a deployment-oriented analysis.
+\TODO{Replace this provisional conclusion with measured findings, their scope, and the main remaining limitation after results are finalized.}

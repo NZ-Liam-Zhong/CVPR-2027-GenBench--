@@ -1,12 +1,84 @@
 \section{Experiments}
 \label{sec:Experiments}
-This section will summarize the experiments we ran on out scenes, primarily the 50 scene benchmark. We will also discuss methods for increasing scene throughput with Issac Lab.
 
-The full GenBench-$\infty$ library contains 1,000 scenes, but benchmarking can be done using a subset of these scenes. 
+\subsection{Evaluation Tracks and Frozen Protocol}
+\label{sec:gb_tracks}
+We separate three tracks to accommodate heterogeneous inference costs without conflating evaluation populations.
+\begin{itemize}
+\item \textbf{Common Core:} a shared, preselected subset for all compatible policy systems. The current experimental scope is 50 scenes; task counts, embodiment cells, and repeated trials remain to be specified.
+\item \textbf{Full Suite:} the complete validated release, targeted at 1,000 scenes and 3,000 task instances, evaluated by systems for which full coverage is feasible.
+\item \textbf{Paired Real:} matched simulation and physical experiments for evaluating predictive validity.
+\end{itemize}
+Select the Common Core using declared strata before inspecting policy outcomes. Report its sampling weights and representativeness. Scores from different tracks must not be combined into one ranking. Missing or unsupported evaluations are not zero-success observations.
 
+\TODO{Freeze scene/task manifests, seeds, repetitions, time budgets, policies and versions, prompts, adapters, sensor inputs, simulator versions, hardware, and API settings. State which details are implemented versus proposed.}
 
-%-------------------------------------------------------------------------
-\subsection{Egocentric Video Rationale}
+\subsection{Reported Systems and Embodiments}
+The current experiment inventory includes GPT-6-Astra, Gemini Argon 4, and Claude Fable 5.1 with Franka Panda, Galaxea R1, and Galaxea R1 Pro configurations, and Dream-1 with a dual-YAM configuration. These names and configurations follow the current project draft; exact API model identifiers, versions, completed episode counts, and the evaluated configuration matrix remain to be recorded. RDT2 is a candidate for full-suite evaluation and is not treated here as a completed result.
 
+These configurations do not form a fully crossed experiment. In particular, a Dream-1 result on dual YAM and an Astra result on Franka cannot isolate the effect of the policy from that of the embodiment, sensors, controller, and harness. Report such measurements as system-level outcomes. Policy comparisons require a shared supported embodiment and matched task conditions; embodiment comparisons require a shared policy system where supported.
+\TODO{Confirm this inventory against run logs. Do not assume that every listed model was run on every listed robot or on every task in the 50 scenes.}
 
-\url{https://www.computer.org/about/contact}.
+\subsection{Main Policy Comparison}
+\label{sec:gb_results}
+\begin{table}[t]
+\centering\small
+\begin{tabular}{lcccc}
+\hline
+System & Robot & $N$ & SR (CI) & Time \\
+\hline
+Astra system & TBD & TBD & TBD & TBD \\
+Argon system & TBD & TBD & TBD & TBD \\
+Fable system & TBD & TBD & TBD & TBD \\
+Dream system & TBD & TBD & TBD & TBD \\
+% RDT2 belongs in a separate table if evaluated on the Full Suite only.
+\hline
+\end{tabular}
+\caption{Common Core result scaffold for intended systems. Inclusion does not assert completed coverage; all values are pending. $N$ is the number of episodes; also report independent source-scene counts. Use separate panels for matched robot configurations and identify the time definition.}
+\label{tab:gb_core}
+\end{table}
+Report family-level macro averages and instance-weighted averages with explicit weights. Provide per-domain and per-embodiment breakdowns. Full Suite results require a separate table with coverage denominators. Explain differences using failure categories rather than only aggregate scores.
+
+\subsection{Scale, Diversity, and Ranking Stability}
+\label{sec:gb_scale}
+Using systems evaluated on the full suite, repeatedly subsample nested or independently sampled sets at declared budgets. Compare random, stratified, and coverage-oriented selection at matched episode budgets. Track estimation error relative to the full-suite estimate, rank agreement, probability of selecting a suboptimal system, and discovery of distinct failure categories. Track independent scene count as well as task-instance count.
+\TODO{Insert sampling repetitions, uncertainty intervals, task budgets, and results. The full-suite estimate is an empirical reference, not ground-truth universal performance.}
+
+\subsection{Paired Simulation and Real-World Evaluation}
+\label{sec:gb_real}
+Match task goals, initial conditions, sensors, robot configurations, and execution budgets as closely as practical. Separate scenes used to calibrate simulation parameters from held-out scenes used to validate agreement. State deviations and whether timing and intervention outcomes are measured in both settings.
+
+Report ranking agreement, absolute success-rate error, and uncertainty. Use policy-level rankings alongside task-level analyses, without treating repeated trials as independent policy comparisons. For cross-embodiment claims, include physical tests on multiple embodiments; otherwise restrict the claim to the tested robot.
+
+\begin{table}[t]
+\centering\small
+\begin{tabular}{lc}
+\hline
+Paired evaluation quantity & Result \\
+\hline
+Independent scenes / task families & TBD \\
+Policies / physical embodiments & TBD \\
+Trials per matched condition & TBD \\
+Spearman rank correlation & TBD \\
+Pearson correlation & TBD \\
+Success-rate MAE & TBD \\
+Embodiment selection agreement & TBD \\
+\hline
+\end{tabular}
+\caption{Paired simulation--real-world validation scaffold. Report confidence intervals and the aggregation unit for each statistic; omit unsupported quantities.}
+\label{tab:gb_real}
+\end{table}
+
+\subsection{Generation Ablations}
+\label{sec:gb_ablation}
+Compare one-shot generation, sequential repair, best-of-$N$ or random proposals, and the implemented search method at matched generation budgets. Report validated yield, dollars and elapsed time per validated task, manual intervention, and failure categories. Ablate individual validation components and source-video information where technically meaningful.
+\TODO{Add actual baselines, budget definitions, repeated runs, independent audit results, and evidence that accepted environments preserve the source task.}
+
+\subsection{Evaluation Throughput}
+\label{sec:gb_throughput}
+Compare synchronous execution with the proposed asynchronous scheduler using matched resources and evaluation semantics. Vary worker count and report completed episodes per hour, cost per completed episode, utilization, API latency, rate-limit errors, and policy outcomes. Distinguish simulation-bound from inference-bound workloads. Document whether numerical nondeterminism or timing semantics change measured behavior.
+
+\subsection{Human-Referenced Efficiency and Embodiment Choice}
+\label{sec:gb_economics}
+For directly matched tasks with valid human timing, analyze completion time and successful throughput. Present policy--embodiment success, latency, and cost tradeoffs, including configurations that are dominated on all three dimensions. Report sensitivity to utilization, hardware lifetime, maintenance, inference pricing, and human intervention. Treat economic estimates as scenarios unless real deployment measurements support stronger claims.
+\TODO{Insert measured timing distributions, pricing dates and sources, cost assumptions, and sensitivity plots. Do not transfer a source video's human duration to a derived task.}
